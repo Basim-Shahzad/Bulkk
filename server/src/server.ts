@@ -11,7 +11,7 @@ const PORT: number = 5000;
 // Middleware
 app.use(
    cors({
-      origin: "http://localhost:3000",
+      origin: "http://localhost:5173",
       credentials: true, // Required to allow cookies to be sent back and forth
    }),
 );
@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(errorMiddleware);
 
 // This prefixes all routes in auth.route with "/api/auth"
-app.use("/api/v1/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req: Request, res: Response) => {
    res.send("Server is running!");
