@@ -1,4 +1,4 @@
-import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios";
+import axios, { type AxiosInstance } from "axios";
 
 /**
  * Optional: shape of your API error response
@@ -9,14 +9,7 @@ export interface ApiError {
    statusCode?: number;
 }
 
-/**
- * Extend Axios config with retry flag
- */
-interface RetryConfig extends AxiosRequestConfig {
-   _retry?: boolean;
-}
-
-const VITE_API_URL = import.meta.env.VITE_API_URL
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 /**
  * Create instance
@@ -33,53 +26,26 @@ const api: AxiosInstance = axios.create({
 /* ============================
    REQUEST INTERCEPTOR
 ============================ */
-api.interceptors.request.use(
-   (config) => {
-      const token = localStorage.getItem("accessToken");
 
-      if (token && config.headers) {
-         config.headers.Authorization = `Bearer ${token}`;
-      }
-
-      return config;
-   },
-   (error) => Promise.reject(error),
-);
+api.interceptors.request.use((config) => {
+   const token = localStorage.getItem("accessToken");
+   if (token) config.headers.Authorization = `Bearer ${token}`;
+   return config;
+});
 
 /* ============================
    RESPONSE INTERCEPTOR
 ============================ */
 api.interceptors.response.use(
-   (response: AxiosResponse) => response,
-   async (error: AxiosError<ApiError>) => {
-      const originalRequest = error.config as RetryConfig;
-
-      if (error.response?.status === 401 && !originalRequest?._retry) {
-         originalRequest._retry = true;
-
-         try {
-            const res = await axios.post<{ accessToken: string }>(
-               `${import.meta.env.VITE_API_URL}/auth/refresh`,
-               {},
-               { withCredentials: true },
-            );
-
-            localStorage.setItem("accessToken", res.data.accessToken);
-
-            originalRequest.headers = {
-               ...originalRequest.headers,
-               Authorization: `Bearer ${res.data.accessToken}`,
-            };
-
-            return api(originalRequest);
-         } catch (refreshError) {
-            localStorage.removeItem("accessToken");
-            window.location.href = "/login";
-            return Promise.reject(refreshError);
-         }
+   (res) => res,
+   async (err) => {
+      if (err.response?.status === 401) {
+         const { data } = await api.post("/auth/refresh");
+         localStorage.setItem("accessToken", data.accessToken);
+         err.config.headers.Authorization = `Bearer ${data.accessToken}`;
+         return api(err.config);
       }
-
-      return Promise.reject(error);
+      return Promise.reject(err);
    },
 );
 
