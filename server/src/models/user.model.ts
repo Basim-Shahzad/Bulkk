@@ -1,30 +1,26 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Document, Types } from "mongoose";
 
-const userSchema = new Schema({
-   name: {
-      type: String,
-      required: [true, 'Username is Required'],
-      trim: true,
-      minLength: 2,
-      maxLength: 50,
+export interface IUser extends Document {
+   name: string;
+   email: string;
+   password: string;
+   role: "admin" | "staff";
+   store: Types.ObjectId;
+   isActive: boolean;
+}
+
+const userSchema = new Schema<IUser>(
+   {
+      name: { type: String, required: true, trim: true },
+      email: { type: String, required: true, lowercase: true, trim: true },
+      password: { type: String, required: true, select: false },
+      role: { type: String, enum: ["admin", "staff"], default: "staff" },
+      store: { type: Schema.Types.ObjectId, ref: "Store", required: true },
+      isActive: { type: Boolean, default: true },
    },
-   email: {
-      type: String,
-      required: [true, 'Email is Required'],
-      unique: true,
-      lowercase: true,
-      trim: true,
-      minLength: 2,
-      maxLength: 50,
-      match: [/\S+@\S+\.\S+/, 'Please Enter a valid Email']
-   },
-   password: {
-      type: String,
-      required: [true, 'Password is Required'],
-      minLength: 8,
-   }
-}, { timestamps: true });
+   { timestamps: true },
+);
 
+userSchema.index({ email: 1, store: 1 }, { unique: true });
 
-const User = models.User || model("User", userSchema);
-export default User;
+export const User = models.User || model<IUser>("User", userSchema);
