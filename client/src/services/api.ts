@@ -1,8 +1,5 @@
 import axios, { type AxiosInstance } from "axios";
 
-/**
- * Optional: shape of your API error response
- */
 export interface ApiError {
    message: string;
    code?: string;
@@ -11,42 +8,49 @@ export interface ApiError {
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-/**
- * Create instance
- */
 const api: AxiosInstance = axios.create({
    baseURL: `${VITE_API_URL}/api`,
    timeout: 15_000,
-   withCredentials: true,
+   withCredentials: true, // This sends cookies automatically
    headers: {
       "Content-Type": "application/json",
    },
 });
 
-/* ============================
-   REQUEST INTERCEPTOR
-============================ */
+export function setupInterceptors(accessToken: string | null) {
+   api.interceptors.request.clear();
+   api.interceptors.response.clear();
 
-api.interceptors.request.use((config) => {
-   const token = localStorage.getItem("accessToken");
-   if (token) config.headers.Authorization = `Bearer ${token}`;
-   return config;
-});
-
-/* ============================
-   RESPONSE INTERCEPTOR
-============================ */
-api.interceptors.response.use(
-   (res) => res,
-   async (err) => {
-      if (err.response?.status === 401) {
-         const { data } = await api.post("/auth/refresh");
-         localStorage.setItem("accessToken", data.accessToken);
-         err.config.headers.Authorization = `Bearer ${data.accessToken}`;
-         return api(err.config);
+   api.interceptors.request.use((config) => {
+      if (accessToken) {
+         config.headers.Authorization = `Bearer ${accessToken}`;
       }
-      return Promise.reject(err);
-   },
-);
+      return config;
+   });
+
+   api.interceptors.response.use(
+      (res) => res,
+      async (err) => {
+         const originalRequest = err.config;
+
+         // If 401 and haven't retried yet
+         if (err.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            try {
+               const { data } = await api.post("/auth/refresh");
+               // Backend will automatically send new refreshToken in httpOnly cookie
+               // You just need to update the accessToken in state
+               return api(originalRequest);
+            } catch (refreshError) {
+               // Refresh failed, user needs to login again
+               return Promise.reject(refreshError);
+            }
+         }
+
+         return Promise.reject(err);
+      },
+   );
+}
 
 export default api;
