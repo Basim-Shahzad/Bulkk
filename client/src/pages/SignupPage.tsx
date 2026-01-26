@@ -1,7 +1,36 @@
-import React from "react";
-import { HiOutlineUser, HiOutlineMap, HiOutlineLockClosed, HiBuildingStorefront } from "react-icons/hi2";
+import React, { useEffect } from "react";
+import { HiOutlineUser, HiOutlineEnvelope, HiOutlineLockClosed, HiBuildingStorefront } from "react-icons/hi2";
+import { useAuth, useSignup } from "../features/auth/hooks";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+
+type SignupFormData = {
+   name: string;
+   email: string;
+   password: string;
+   storeName: string;
+};
 
 const SignupPage: React.FC = () => {
+   const {
+      register,
+      handleSubmit,
+      formState: { errors },
+   } = useForm<SignupFormData>();
+   const { mutate: signup, isLoading } = useSignup();
+   const { user, isAuthenticated } = useAuth();
+   const navigate = useNavigate();
+
+   const onSubmit = (data: SignupFormData) => {
+      signup(data);
+   };
+
+   useEffect(() => {
+      if (isAuthenticated && user) {
+         navigate("/dashboard");
+      }
+   }, [isAuthenticated, user, navigate]);
+
    return (
       <div className="pt-10 bg-white flex flex-col items-center px-4">
          <div className="max-w-md w-full">
@@ -12,7 +41,7 @@ const SignupPage: React.FC = () => {
                <p className="mt-2 text-gray-500">Start managing your inventory today.</p>
             </div>
 
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                {/* Username Field */}
                <div>
                   <label className="block text-sm font-medium text-gray-700">Username</label>
@@ -22,10 +51,12 @@ const SignupPage: React.FC = () => {
                      </div>
                      <input
                         type="text"
-                        placeholder="johndoe"
+                        {...register("name", { required: "Name is Required" })}
+                        autoComplete="name"
                         className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 outline-none transition-all"
                      />
                   </div>
+                  {errors.name && <span className="text-red-700 ">{errors.name.message}</span>}
                </div>
 
                {/* Email Field */}
@@ -33,14 +64,16 @@ const SignupPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700">Email Address</label>
                   <div className="relative mt-1">
                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                        <HiOutlineMap />
+                        <HiOutlineEnvelope />
                      </div>
                      <input
                         type="email"
-                        placeholder="name@company.com"
+                        {...register("email", { required: "Email is Required" })}
+                        autoComplete="email"
                         className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 outline-none transition-all"
                      />
                   </div>
+                  {errors.email && <span className="text-red-700 ">{errors.email.message}</span>}
                </div>
 
                {/* Password Field */}
@@ -52,10 +85,13 @@ const SignupPage: React.FC = () => {
                      </div>
                      <input
                         type="password"
-                        placeholder="••••••••"
+                        {...register("password", { required: "Password is required" })}
+                        placeholder="•••••••••"
+                        autoComplete="new-password"
                         className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 outline-none transition-all"
                      />
                   </div>
+                  {errors.password && <span className="text-red-700 ">{errors.password.message}</span>}
                </div>
 
                {/* Store Name Field */}
@@ -67,14 +103,18 @@ const SignupPage: React.FC = () => {
                      </div>
                      <input
                         type="text"
-                        placeholder="My Awesome Store"
+                        {...register("storeName", { required: "Store name is required" })}
+                        autoComplete="organization"
                         className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-blue-600 focus:border-blue-600 outline-none transition-all"
                      />
                   </div>
+                  {errors.storeName && <span className="text-red-700 ">{errors.storeName.message}</span>}
                </div>
 
-               <button className="w-full mt-6 px-8 py-3 text-white bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md active:scale-95">
-                  Create Account
+               <button
+                  type="submit"
+                  className="w-full mt-6 px-8 py-3 text-white bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md active:scale-95">
+                  {isLoading ? "Signing up…" : "Sign Up"}
                </button>
             </form>
 

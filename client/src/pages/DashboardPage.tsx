@@ -1,5 +1,7 @@
 import React from "react";
 import { HiOutlineTrendingUp, HiOutlineTrendingDown, HiOutlineCube, HiOutlineCash, HiOutlineShoppingCart, HiOutlineUsers } from "react-icons/hi";
+import { useAuth } from "../features/auth/hooks";
+import { useNavigate } from "react-router-dom";
 
 interface StatCardProps {
    title: string;
