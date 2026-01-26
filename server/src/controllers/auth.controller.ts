@@ -80,7 +80,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
    try {
       const { email, password } = req.body;
 
-      const user = await User.findOne({ email }).select("+password").populate("store", "name")
+      const user = await User.findOne({ email }).select("+password").populate("store", "name");
       if (!user) {
          const error: CustomError = new Error("User not found");
          error.statusCode = 404;
@@ -147,6 +147,33 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
       res.clearCookie("refreshToken", {
          path: "/",
       }).sendStatus(204);
+   } catch (error) {
+      next(error);
+   }
+};
+
+export const getCurrentUser = async (req: Request, res: Response, next: NextFunction) => {
+   try {
+      const token = req.cookies.refreshToken;
+      if (!token) {
+         const err: CustomError = new Error("Not authenticated");
+         err.statusCode = 401;
+         throw err;
+      }
+
+      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET!);
+      const user = await User.findById(decoded.userId).populate("store", "name");
+
+      const accessToken = signAccessToken({
+         userId: user._id,
+         storeId: user.store._id,
+         role: user.role,
+      });
+
+      res.json({
+         accessToken,
+         user: userForResponse(user),
+      });
    } catch (error) {
       next(error);
    }
