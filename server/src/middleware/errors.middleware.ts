@@ -14,7 +14,7 @@ const errorMiddleware = (err: CustomError, req: Request, res: Response, next: Ne
       error = new Error("Resource not found") as CustomError;
       error.statusCode = 404;
    }
-
+   
    res.status(error.statusCode || 500).json({
       success: false,
       error: error.message || "Server Error",
