@@ -4,9 +4,11 @@ import { IUser } from "../models/user.model";
 export const userForResponse = (user: IUser) => {
    const userObj = user.toObject();
    delete userObj.password;
-   // If store is populated, get the name; otherwise keep the ID
-   userObj.store = user.store && typeof user.store === 'object' 
-      ? (user.store as any).name 
-      : user.store;
+
+   userObj.storeName =
+      user.store && typeof user.store === 'object'
+         ? (user.store as any).name
+         : undefined;
+
    return userObj;
 };
