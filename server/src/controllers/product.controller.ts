@@ -117,3 +117,29 @@ export async function increaseProductStockById(req: Request, res: Response, next
       next(error);
    }
 }
+
+export async function decreaseProductStockById(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { id } = req.params;
+      const { decrease } = req.body
+
+      const product: ProductType | null = await Product.findByIdAndUpdate(
+         id,
+         { $inc: { quantity: -Number(decrease) } },
+         { new: true },
+      );
+
+      if (!product) {
+         const error: any = new Error("Product not found");
+         error.statusCode = 404;
+         return next(error);
+      }
+
+      res.status(200).json({
+         success: true,
+         product: product,
+      });
+   } catch (error) {
+      next(error);
+   }
+}

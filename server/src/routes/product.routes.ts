@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProduct, getProductById, getProducts, increaseProductStockById } from "../controllers/product.controller";
+import { createProduct, getProductById, getProducts, increaseProductStockById, decreaseProductStockById } from "../controllers/product.controller";
 import { auth } from "../middleware/auth.middleware";
 
 const productRouter = Router();
@@ -9,5 +9,6 @@ productRouter.post("/products", createProduct);
 productRouter.get("/products", auth,  getProducts);
 productRouter.get("/products/:id", auth, getProductById);
 productRouter.patch("/products/:id/stock-in", auth, increaseProductStockById);
+productRouter.patch("/products/:id/stock-out", auth, decreaseProductStockById);
 
 export default productRouter;
