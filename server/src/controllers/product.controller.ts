@@ -92,6 +92,27 @@ export async function getProductById(req: Request, res: Response, next: NextFunc
    }
 }
 
+export async function deleteProductById(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { id } = req.params;
+
+      const product: ProductType | null = await Product.findByIdAndDelete(id);
+
+      if (!product) {
+         const error: any = new Error("Product not found");
+         error.statusCode = 404;
+         return next(error);
+      }
+
+      res.status(204).json({
+         success: true,
+      });
+
+   } catch (error) {
+      next(error)
+   }
+}
+
 export async function increaseProductStockById(req: Request, res: Response, next: NextFunction) {
    try {
       const { id } = req.params;
