@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { success, z } from "zod";
 import { Product } from "../models/product.model";
-import { Store } from "../models/store.model";
 
 interface CustomError extends Error {
    statusCode?: number;
@@ -32,12 +31,17 @@ export async function createProduct(req: Request, res: Response, next: NextFunct
       }
 
       const data: ProductType = result.data;
+      const storeId = req.user?.storeId;
 
-      // Later check if the store exists
+      if (!storeId) {
+         const err: CustomError = new Error("Store ID is required");
+         err.statusCode = 400;
+         return next(err);
+      }
 
       const newProduct = await Product.create({
-         ...data,
-         store: new mongoose.Types.ObjectId(data.store),
+         ...result.data,
+         store: new mongoose.Types.ObjectId(storeId),
       });
 
       return res.status(201).json({
@@ -59,7 +63,7 @@ export async function getProducts(req: Request, res: Response, next: NextFunctio
          return next(err);
       }
 
-      const products: ProductType[] = await Product.find({ store: storeId });
+      const products: ProductType[] | [] = await Product.find({ store: new Types.ObjectId(storeId) });
 
       res.status(200).json({
          success: true,
