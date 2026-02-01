@@ -23,7 +23,8 @@ export const authApi = {
       })
    },
    logout: async () => {
-      await api.post('/auth/logout')
+      const { data } = await api.post("/auth/logout");
+      return data;
    },
    refresh: async () => {
       await api.post('/auth/refresh')
