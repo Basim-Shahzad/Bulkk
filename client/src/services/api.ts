@@ -17,6 +17,9 @@ const api: AxiosInstance = axios.create({
    },
 });
 
+let isRefreshing = false;
+let refreshPromise: Promise<any> | null = null;
+
 export function setupInterceptors(accessToken: string | null) {
    api.interceptors.request.clear();
    api.interceptors.response.clear();
@@ -33,18 +36,28 @@ export function setupInterceptors(accessToken: string | null) {
       async (err) => {
          const originalRequest = err.config;
 
-         // If 401 and haven't retried yet
+         // ❌ NEVER intercept refresh itself
+         if (originalRequest?.url?.includes("/auth/refresh")) {
+            return Promise.reject(err);
+         }
+
          if (err.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
+            // 🔒 prevent multiple refresh calls
+            if (!isRefreshing) {
+               isRefreshing = true;
+               refreshPromise = api.post("/auth/refresh").finally(() => {
+                  isRefreshing = false;
+                  refreshPromise = null;
+               });
+            }
+
             try {
-               const { data } = await api.post("/auth/refresh");
-               // Backend will automatically send new refreshToken in httpOnly cookie
-               // You just need to update the accessToken in state
+               await refreshPromise;
                return api(originalRequest);
-            } catch (refreshError) {
-               // Refresh failed, user needs to login again
-               return Promise.reject(refreshError);
+            } catch {
+               return Promise.reject(err); // logout happens elsewhere
             }
          }
 
