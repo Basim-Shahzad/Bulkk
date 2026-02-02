@@ -31,17 +31,9 @@ export async function createProduct(req: Request, res: Response, next: NextFunct
       }
 
       const data: ProductType = result.data;
-      const storeId = req.user?.storeId;
-
-      if (!storeId) {
-         const err: CustomError = new Error("Store ID is required");
-         err.statusCode = 400;
-         return next(err);
-      }
 
       const newProduct = await Product.create({
          ...result.data,
-         store: new mongoose.Types.ObjectId(storeId),
       });
 
       return res.status(201).json({
