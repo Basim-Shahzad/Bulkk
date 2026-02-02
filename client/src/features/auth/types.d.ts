@@ -3,6 +3,10 @@ export interface User {
    email: string;
    role: "admin" | "staff";
    storeName?: string;
+   store: {
+      _id: string,
+      name: string
+   }
    isActive: boolean;
 }
 
