@@ -1,6 +1,7 @@
 import { productApi } from "./api";
 import { useAuth } from "../auth/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { Product } from "./types";
 
 export const useProducts = () => {
    const { isAuthenticated } = useAuth();
@@ -46,12 +47,24 @@ export const useDeleteProduct = () => {
    });
 };
 
+export const useProductUpdate = () => {
+   const queryClient = useQueryClient();
+
+   return useMutation({
+      mutationFn: ({ id, productData }: { id: string; productData: Partial<Product> }) =>
+         productApi.updateProduct(id, productData),
+      onSuccess: (data) => {
+         queryClient.invalidateQueries({ queryKey: ["products"] });
+         queryClient.invalidateQueries({ queryKey: ["product", data.product._id] })
+      },
+   });
+};
+
 export const useIncreaseStock = () => {
    const queryClient = useQueryClient();
 
    return useMutation({
-      mutationFn: ({ id, amount }: { id: string; amount: number }) =>
-         productApi.increaseStock(id, amount),
+      mutationFn: ({ id, amount }: { id: string; amount: number }) => productApi.increaseStock(id, amount),
 
       onSuccess: (_data, variables) => {
          queryClient.invalidateQueries({ queryKey: ["products"] });
@@ -66,8 +79,7 @@ export const useDecreaseStock = () => {
    const queryClient = useQueryClient();
 
    return useMutation({
-      mutationFn: ({ id, amount }: { id: string; amount: number }) =>
-         productApi.decreaseStock(id, amount),
+      mutationFn: ({ id, amount }: { id: string; amount: number }) => productApi.decreaseStock(id, amount),
 
       onSuccess: (_data, variables) => {
          queryClient.invalidateQueries({ queryKey: ["products"] });

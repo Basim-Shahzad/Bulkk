@@ -38,6 +38,11 @@ export const productApi = {
       return data;
    },
 
+   updateProduct: async (id: string, productData: Partial<Product>): Promise<ProductResponse> => {
+      const { data } = await api.patch<ProductResponse>(`/products/${id}`, productData);
+      return data;
+   },
+
    increaseStock: async (id: string, amount: number): Promise<ProductResponse> => {
       const { data } = await api.patch<ProductResponse>(`/products/${id}/stock-in`, { increaseAmount: amount });
       return data;
