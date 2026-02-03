@@ -103,16 +103,34 @@ export async function deleteProductById(req: Request, res: Response, next: NextF
       res.status(204).json({
          success: true,
       });
-
    } catch (error) {
-      next(error)
+      next(error);
+   }
+}
+
+export async function updateProduct(req: Request, res: Response, next: NextFunction) {
+   try {
+      const { id } = req.params;
+
+      const product = await Product.findByIdAndUpdate(id, req.body, {
+         new: true,
+         runValidators: true,
+      });
+
+      if (!product) {
+         return res.status(404).json({ message: "Product not found" });
+      }
+
+      res.status(200).json(product);
+   } catch (error) {
+      next(error);
    }
 }
 
 export async function increaseProductStockById(req: Request, res: Response, next: NextFunction) {
    try {
       const { id } = req.params;
-      const { increase } = req.body
+      const { increase } = req.body;
 
       const product: ProductType | null = await Product.findByIdAndUpdate(
          id,
@@ -138,7 +156,7 @@ export async function increaseProductStockById(req: Request, res: Response, next
 export async function decreaseProductStockById(req: Request, res: Response, next: NextFunction) {
    try {
       const { id } = req.params;
-      const { decrease } = req.body
+      const { decrease } = req.body;
 
       const product: ProductType | null = await Product.findByIdAndUpdate(
          id,
