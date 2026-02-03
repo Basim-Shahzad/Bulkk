@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { Product } from "../types";
 import { CgClose, CgMathMinus, CgMathPlus } from "react-icons/cg";
 import { useDeleteProduct, useProductUpdate } from "../hooks";
@@ -15,8 +15,16 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, closeM
    const [currentStock, setCurrentStock] = useState<number>(product.quantity);
 
    const handleStockAdjust = (amount: number) => {
-      setCurrentStock((state) => state + amount);
+      if ( currentStock + amount >= 0 ) {
+         setCurrentStock((state) => state + amount);
+      }
    };
+
+   useEffect(() => {
+      if (currentStock < 0) {
+         alert("Stock can't be negative")
+      }
+   }, [currentStock, setCurrentStock])
 
    const handleDeleteProduct = () => {
       let result = confirm("Are you sure you want to delete this product?");
