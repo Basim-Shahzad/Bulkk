@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes";
 import productRoutes from "./routes/product.routes";
 import customerRoutes from "./routes/customer.routes";
+import adminRoutes from './routes/admin.routes'
 import { connectToDatabase } from "../database/mongodb";
 import errorMiddleware from "./middleware/errors.middleware";
 
@@ -25,6 +26,7 @@ app.use(errorMiddleware);
 app.use("/api/auth", authRoutes);
 app.use("/api", productRoutes);
 app.use("/api", customerRoutes);
+app.use("/api", adminRoutes);
 
 app.get("/", (req: Request, res: Response) => {
    res.send("Server is running!");
