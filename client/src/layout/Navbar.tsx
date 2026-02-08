@@ -1,25 +1,35 @@
 import React, { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, href } from "react-router-dom";
 import { HiOutlineMenuAlt2, HiOutlineX, HiOutlineChartBar, HiOutlineCube, HiOutlineShoppingCart } from "react-icons/hi";
+import { GrUserAdmin } from "react-icons/gr";
 import { useAuth, useLogout } from "../features/auth/hooks";
 import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
    const [isOpen, setIsOpen] = useState(false);
    const { isAuthenticated, user } = useAuth();
-   const { mutate: logoutFunction } =  useLogout()
+   const { mutate: logoutFunction } = useLogout();
    const navigate = useNavigate();
    const navigation = [
       { name: "Dashboard", href: "/dashboard", icon: HiOutlineChartBar },
       { name: "Inventory", href: "/inventory", icon: HiOutlineCube },
       { name: "Sales", href: "/sales", icon: HiOutlineShoppingCart },
       { name: "Products", href: "/products", icon: HiOutlineShoppingCart },
+      ...(user?.role === "admin"
+         ? [
+              {
+                 name: "Admin",
+                 href: "/admin",
+                 icon: GrUserAdmin,
+              },
+           ]
+         : []),
    ];
 
    function logout() {
-      let result = confirm('Are you sure you want to Logout')
+      let result = confirm("Are you sure you want to Logout");
       if (result) {
-        logoutFunction()
+         logoutFunction();
       }
    }
 
@@ -55,7 +65,9 @@ const Navbar: React.FC = () => {
                               <div className="bg-blue-600 rounded-full w-10 h-10 text-white flex justify-center items-center text-xl cursor-pointer">
                                  {user.name[0].toUpperCase()}
                               </div>
-                              <button onClick={() => logout()} className="bg-blue-600 flex items-center hover:bg-blue-700 px-4 py-0.5 text-sm text-white rounded-lg transition-all duration-150">
+                              <button
+                                 onClick={() => logout()}
+                                 className="bg-blue-600 flex items-center hover:bg-blue-700 px-4 py-0.5 text-sm text-white rounded-lg transition-all duration-150">
                                  Logout
                               </button>
                            </div>
