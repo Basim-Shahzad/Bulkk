@@ -9,6 +9,7 @@ import Homepage from "./pages/HomePage";
 import Dashboard from "./pages/DashboardPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
+import CustomersPage from "./pages/CustomersPage";
 
 // Provides
 import { AuthProvider } from "./features/auth/AuthContext";
@@ -45,12 +46,16 @@ const router = createBrowserRouter([
          },
          {
             path: "products",
-            element: <ProductsPage />
+            element: <ProductsPage />,
+         },
+         {
+            path: "customers",
+            element: <CustomersPage />,
          },
          {
             path: "admin",
-            element: <AdminPage />
-         }
+            element: <AdminPage />,
+         },
       ],
    },
 ]);

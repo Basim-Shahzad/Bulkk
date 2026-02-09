@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, Link, href } from "react-router-dom";
 import { HiOutlineMenuAlt2, HiOutlineX, HiOutlineChartBar, HiOutlineCube, HiOutlineShoppingCart } from "react-icons/hi";
+import { IoPeople } from "react-icons/io5";
 import { GrUserAdmin } from "react-icons/gr";
 import { useAuth, useLogout } from "../features/auth/hooks";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +16,7 @@ const Navbar: React.FC = () => {
       { name: "Inventory", href: "/inventory", icon: HiOutlineCube },
       { name: "Sales", href: "/sales", icon: HiOutlineShoppingCart },
       { name: "Products", href: "/products", icon: HiOutlineShoppingCart },
+      { name: "Customer", href: "/customers", icon: IoPeople },
       ...(user?.role === "admin"
          ? [
               {
