@@ -10,8 +10,8 @@ interface CustomError extends Error {
 
 const CustomerSchema = z.object({
    name: z.string().min(1, "Name is required"),
-   phone: z.string(),
-   email: z.string(),
+   phone: z.string().optional(),
+   email: z.string().optional(),
    store: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
       message: "Invalid Store ID format",
    }),
