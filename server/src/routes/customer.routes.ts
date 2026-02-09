@@ -5,7 +5,7 @@ import { auth } from "../middleware/auth.middleware";
 const customerRouter = Router();
 
 // Public routes
-customerRouter.post("/customers", createCustomer);
+customerRouter.post("/customers", auth, createCustomer);
 customerRouter.get("/customers", auth,  getCustomers);
 customerRouter.get("/customers/:id", auth, getCustomerById);
 customerRouter.delete("/customers/:id", auth, deleteCustomerById);

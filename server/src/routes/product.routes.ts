@@ -5,7 +5,7 @@ import { auth } from "../middleware/auth.middleware";
 const productRouter = Router();
 
 // Public routes
-productRouter.post("/products", createProduct);
+productRouter.post("/products", auth, createProduct);
 productRouter.get("/products", auth,  getProducts);
 productRouter.get("/products/:id", auth, getProductById);
 productRouter.delete("/products/:id", auth, deleteProductById);
