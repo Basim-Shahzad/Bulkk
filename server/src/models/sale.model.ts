@@ -1,6 +1,6 @@
 import { Schema, model, models, Document, Types } from "mongoose";
 
-interface ISaleItem {
+export interface ISaleItem {
    product: Types.ObjectId;
    quantity: number;
    unitPrice: number;
