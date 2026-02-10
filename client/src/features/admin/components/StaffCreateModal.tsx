@@ -26,7 +26,10 @@ const StaffCreateModal: React.FC<StaffCreateModalProps> = ({ closeModal, onCreat
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
          <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden">
             <div className="flex justify-between items-center p-6 border-b">
-               <h2 className="text-2xl font-bold text-gray-800">Add New Staff Member</h2>
+               <div>
+                  <h2 className="text-2xl font-bold text-gray-800">Add New Staff Member</h2>
+                  <h2 className="text-xs font-extrabold text-gray-500">The default password is the staff member’s name in lowercase, with no spaces.</h2>
+               </div>
                <button
                   type="button"
                   onClick={() => closeModal(false)}
