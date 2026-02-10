@@ -183,7 +183,7 @@ export const changePassword = async (req: Request, res: Response, next: NextFunc
    try {
       const { email, oldPassword, newPassword } = req.body;
 
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email }).select('+password');
       if (!user) {
          const error: CustomError = new Error("User not found");
          error.statusCode = 404;
