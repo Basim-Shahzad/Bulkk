@@ -11,7 +11,8 @@ export interface ISale extends Document {
    customer?: Types.ObjectId;
    items: ISaleItem[];
    totalAmount: number;
-   soldBy: Types.ObjectId;
+   // soldBy: Types.ObjectId;
+   soldBy: string;
 }
 
 const saleItemSchema = new Schema<ISaleItem>({
@@ -26,14 +27,14 @@ const saleSchema = new Schema<ISale>(
       customer: { type: Schema.Types.ObjectId, ref: "Customer" },
       items: { type: [saleItemSchema], required: true },
       totalAmount: { type: Number, min: 0 },
-      soldBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+      // soldBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+      soldBy: { type: String, required: true },
    },
    { timestamps: true },
 );
 
 saleSchema.pre("validate", function (next) {
    this.totalAmount = this.items.reduce((sum, i) => sum + i.quantity * i.unitPrice, 0);
-   next();
 });
 
 saleSchema.index({ store: 1, createdAt: -1 });
