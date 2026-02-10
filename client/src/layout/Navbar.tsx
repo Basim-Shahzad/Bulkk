@@ -5,11 +5,13 @@ import { IoPeople } from "react-icons/io5";
 import { GrUserAdmin } from "react-icons/gr";
 import { useAuth, useLogout } from "../features/auth/hooks";
 import { useNavigate } from "react-router-dom";
+import ProfileModal from "../features/auth/components/ProfileModal";
 
 const Navbar: React.FC = () => {
    const [isOpen, setIsOpen] = useState(false);
+   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false)
    const { isAuthenticated, user } = useAuth();
-   const { mutate: logoutFunction } = useLogout();
+
    const navigate = useNavigate();
    const navigation = [
       { name: "Dashboard", href: "/dashboard", icon: HiOutlineChartBar },
@@ -28,12 +30,7 @@ const Navbar: React.FC = () => {
          : []),
    ];
 
-   function logout() {
-      let result = confirm("Are you sure you want to Logout");
-      if (result) {
-         logoutFunction();
-      }
-   }
+  
 
    return (
       <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
@@ -64,14 +61,12 @@ const Navbar: React.FC = () => {
                      <div className="flex gap-2">
                         {isAuthenticated && user ? (
                            <div className="flex gap-2">
-                              <div className="bg-blue-600 rounded-full w-10 h-10 text-white flex justify-center items-center text-xl cursor-pointer">
+                              <div
+                                 onClick={() => setIsProfileModalOpen(true)}
+                                 className="bg-blue-600 rounded-full w-10 h-10 text-white flex justify-center items-center text-xl cursor-pointer">
                                  {user.name[0].toUpperCase()}
                               </div>
-                              <button
-                                 onClick={() => logout()}
-                                 className="bg-blue-600 flex items-center hover:bg-blue-700 px-4 py-0.5 text-sm text-white rounded-lg transition-all duration-150">
-                                 Logout
-                              </button>
+
                            </div>
                         ) : (
                            <div className="flex gap-2">
@@ -123,6 +118,7 @@ const Navbar: React.FC = () => {
                ))}
             </div>
          </div>
+         {isProfileModalOpen ? <ProfileModal closeModal={setIsProfileModalOpen} /> : ""}
       </nav>
    );
 };

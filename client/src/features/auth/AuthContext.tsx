@@ -16,15 +16,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    const [accessToken, setAccessToken] = useState<string | null>(initialState.accessToken);
 
    useEffect(() => {
-      // On app mount, try to get current user with existing cookies
       const restoreAuth = async () => {
          try {
-            const { data } = await api.get("/auth/me"); // Add this endpoint to your backend
+            const { data } = await api.get("/auth/me");
             setAccessToken(data.accessToken);
             setUser(data.user);
             setupInterceptors(data.accessToken);
          } catch (error) {
-            // No valid session, user is logged out
             setupInterceptors(null);
          }
       };

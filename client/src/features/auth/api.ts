@@ -8,6 +8,11 @@ interface SignupCredentials extends LoginCredentials {
    name: string;
    storeName: string;
 }
+interface ChangePasswordData {
+   email: string;
+   oldPassword: string;
+   newPassword: string;
+}
 
 export const authApi = {
    login: async (loginData : LoginCredentials) => {
@@ -28,5 +33,9 @@ export const authApi = {
    },
    refresh: async () => {
       await api.post('/auth/refresh')
+   },
+   changePassword: async (changePasswordData : ChangePasswordData) => {
+      const { data } = await api.post("/auth/change-password/", changePasswordData);
+      return data;
    },
 };

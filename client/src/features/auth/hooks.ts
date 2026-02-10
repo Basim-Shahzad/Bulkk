@@ -56,3 +56,16 @@ export const useLogout = () => {
       },
    });
 };
+
+export const useChangePassword = () => {
+   const queryClient = useQueryClient();
+   const navigate = useNavigate();
+   const { setUser } = useAuth();
+   return useMutation({
+      mutationFn: authApi.changePassword,
+      onSuccess: async (data) => {
+         const { user } = data;
+         setUser(user);
+      },
+   });
+};
