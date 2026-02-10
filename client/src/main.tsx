@@ -17,6 +17,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProductsPage from "./pages/ProductsPage";
 import AdminPage from "./pages/AdminPage";
+import SalesPage from "./pages/SalesPage";
 
 const router = createBrowserRouter([
    {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
          {
             path: "customers",
             element: <CustomersPage />,
+         },
+         {
+            path: "sales",
+            element: <SalesPage />,
          },
          {
             path: "admin",
