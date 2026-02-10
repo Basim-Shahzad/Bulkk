@@ -6,7 +6,7 @@ import { useAuth } from "../../auth/hooks";
 
 interface CustomerCreateModalProps {
    closeModal: (value: boolean) => void;
-   onCreate: (product: Omit<Customer, "_id">) => void;
+   onCreate: (customer: Omit<Customer, "_id">) => void;
 }
 
 type CustomerFormInput = Omit<Customer, "_id">;
