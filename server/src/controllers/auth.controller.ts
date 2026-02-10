@@ -77,48 +77,46 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
-   export const login = async (req: Request, res: Response, next: NextFunction) => {
-      try {
-         const { email, password } = req.body;
+   try {
+      const { email, password } = req.body;
 
-         const user = await User.findOne({ email }).select("+password").populate("store", "name");
-         if (!user) {
-            const error: CustomError = new Error("User not found");
-            error.statusCode = 404;
-            throw error;
-         }
-
-         const isPasswordValid = await bcrypt.compare(password, user.password);
-         if (!isPasswordValid) {
-            const error: CustomError = new Error("Invalid Password");
-            error.statusCode = 401;
-            throw error;
-         }
-
-         const payload = {
-            userId: user._id,
-            storeId: user.store._id,
-            role: user.role,
-         };
-
-         const accessToken = signAccessToken(payload);
-         const refreshToken = signRefreshToken(payload);
-
-         res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            path: "/",
-         })
-            .status(200)
-            .json({
-               accessToken,
-               user: userForResponse(user),
-            });
-      } catch (error) {
-         next(error);
+      const user = await User.findOne({ email }).select("+password").populate("store", "name");
+      if (!user) {
+         const error: CustomError = new Error("User not found");
+         error.statusCode = 404;
+         throw error;
       }
-   };
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+         const error: CustomError = new Error("Invalid Password");
+         error.statusCode = 401;
+         throw error;
+      }
+
+      const payload = {
+         userId: user._id,
+         storeId: user.store._id,
+         role: user.role,
+      };
+
+      const accessToken = signAccessToken(payload);
+      const refreshToken = signRefreshToken(payload);
+
+      res.cookie("refreshToken", refreshToken, {
+         httpOnly: true,
+         secure: true,
+         sameSite: "strict",
+         path: "/",
+      })
+         .status(200)
+         .json({
+            accessToken,
+            user: userForResponse(user),
+         });
+   } catch (error) {
+      next(error);
+   }
 };
 
 export const refresh = (req: Request, res: Response, next: NextFunction) => {
