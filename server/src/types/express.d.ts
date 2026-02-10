@@ -6,7 +6,7 @@ declare global {
          user?: {
             userId: string | mongoose.Types.ObjectId;
             storeId: string | mongoose.Types.ObjectId;
-            role: string;
+            role: "staff" | "admin";
          };
       }
    }
