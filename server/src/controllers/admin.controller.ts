@@ -45,7 +45,7 @@ export async function createStaff(req: Request, res: Response, next: NextFunctio
          return next(err);
       }
 
-      const hashedPassword = await bcrypt.hash(result.data.name, 12);
+      const hashedPassword = await bcrypt.hash(result.data.name.toLowerCase().replace(/\s/g, ""), 12);
 
       const newStaff: Staff = await User.create({
          ...result.data,
