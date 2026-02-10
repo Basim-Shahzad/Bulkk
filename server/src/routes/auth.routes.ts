@@ -9,6 +9,6 @@ authRouter.post("/login", login);
 authRouter.post("/logout", logout);
 authRouter.post("/refresh", refresh);
 authRouter.get("/me", getCurrentUser);
-authRouter.get("/change-password", changePassword);
+authRouter.post("/change-password", changePassword);
 
 export default authRouter;
