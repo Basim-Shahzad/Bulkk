@@ -4,4 +4,5 @@ export interface Customer {
    phone?: string;
    email?: string;
    store: string;
+   createdAt?: string
 }

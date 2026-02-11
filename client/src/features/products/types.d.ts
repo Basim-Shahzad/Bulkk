@@ -5,4 +5,6 @@ export interface Product {
    price: number;
    quantity: number;
    store: string;
+   minimumStockLevel?: number;
+   createdAt?: string
 }

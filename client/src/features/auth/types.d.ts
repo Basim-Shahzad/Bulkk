@@ -9,6 +9,7 @@ export interface User {
       name: string
    }
    isActive: boolean;
+   createdAt?: string
 }
 
 export type AuthState = {
