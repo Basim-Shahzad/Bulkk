@@ -21,7 +21,8 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({ closeModal, onC
       defaultValues: {
          price: 0,
          quantity: 0,
-         store: user?.store._id
+         store: user?.store._id,
+         minimumStockLevel: 100
       },
    });
 
@@ -86,6 +87,19 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({ closeModal, onC
                         ))}
                      </select>
                      {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category.message}</p>}
+                  </div>
+                  <div>
+                     <label className="block text-sm font-semibold text-gray-700 mb-1">Minimum Stock Level</label>
+                     <input
+                        type="number"
+                        {...register("minimumStockLevel", {
+                           required: "Minimum Stock Level is required",
+                           min: { value: 0, message: "Cannot be negative" },
+                           valueAsNumber: true,
+                        })}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                     />
+                     {errors.minimumStockLevel && <p className="text-red-500 text-xs mt-1">{errors.minimumStockLevel.message}</p>}
                   </div>
                </div>
 
