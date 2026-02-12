@@ -6,6 +6,7 @@ export interface IProduct extends Document {
    category: string;
    price: number;
    quantity: number;
+   minimumStockLevel: number
 }
 
 const productSchema = new Schema<IProduct>(
@@ -15,6 +16,7 @@ const productSchema = new Schema<IProduct>(
       category: { type: String, required: true, trim: true },
       price: { type: Number, required: true, min: 0 },
       quantity: { type: Number, default: 0, min: 0 },
+      minimumStockLevel: { type: Number, default: 100, min: 0 },
    },
    { timestamps: true },
 );

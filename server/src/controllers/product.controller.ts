@@ -12,6 +12,7 @@ const ProductSchema = z.object({
    category: z.string().min(1, "Category is required"),
    price: z.number().positive("Price must be a positive number"),
    quantity: z.number().int().nonnegative().default(0),
+   minimumStockLevel: z.number().nonnegative().default(100),
    store: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
       message: "Invalid Store ID format",
    }),
