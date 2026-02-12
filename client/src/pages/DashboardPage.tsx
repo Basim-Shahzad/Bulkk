@@ -54,12 +54,6 @@ const Dashboard: React.FC = () => {
       return Array.from(customerSalesCount.values()).filter((count) => count > 1).length;
    }, [salesData]);
 
-   const lowStockItems = [
-      { id: "1", name: "Wireless Mouse", stock: 2, threshold: 5 },
-      { id: "2", name: "Mechanical Keyboard", stock: 0, threshold: 3 },
-      { id: "3", name: "USB-C Cable", stock: 124, threshold: 4 },
-   ];
-
    const lowStockProducts: Product[] = useMemo(
       () =>
          productsData?.products.filter(
