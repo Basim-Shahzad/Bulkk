@@ -3,6 +3,7 @@ import { useProducts } from "../hooks";
 import type { Product } from "../types";
 import ProductCreateModal from "./ProductCreateModal";
 import ProductDetailModal from "./ProductDetailModal";
+import { getStockStatus } from "../../../utils/utilsFunctions";
 
 const ProductsTable: React.FC = () => {
    const { data, error, isLoading } = useProducts();
@@ -23,7 +24,6 @@ const ProductsTable: React.FC = () => {
       return <div>{error.message}</div>;
    }
 
-
    return (
       <div className="flex justify-center items-center">
          <table className="sm:w-11/12 w-1/2 text-left overflow-x-scroll">
@@ -32,7 +32,8 @@ const ProductsTable: React.FC = () => {
                   <th className="px-6 py-3">Product</th>
                   <th className="px-6 py-3">Category</th>
                   <th className="px-6 py-3">Quantity</th>
-                  <th className="px-6 py-3">Price</th>
+                  <th className="px-6 py-3">Unit Price</th>
+                  <th className="px-6 py-3">Status</th>
                </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -48,6 +49,12 @@ const ProductsTable: React.FC = () => {
                      <td className="px-3 py-2 text-gray-600">{prod.category}</td>
                      <td className="px-3 py-2 text-gray-600">{prod.quantity} units</td>
                      <td className="px-3 py-2 text-gray-600">${prod.price}</td>
+                     <td className={``}>
+                        <p
+                           className={`text-${getStockStatus(prod)?.color}-600 font-semibold bg-${getStockStatus(prod)?.color}-100 w-max px-1.5 py-0.5 rounded-2xl`}>
+                           {getStockStatus(prod)?.text}
+                        </p>
+                     </td>
                   </tr>
                ))}
             </tbody>
