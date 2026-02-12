@@ -15,7 +15,6 @@ const Navbar: React.FC = () => {
    const navigate = useNavigate();
    const navigation = [
       { name: "Dashboard", href: "/dashboard", icon: HiOutlineChartBar },
-      { name: "Inventory", href: "/inventory", icon: HiOutlineCube },
       { name: "Sales", href: "/sales", icon: HiOutlineShoppingCart },
       { name: "Products", href: "/products", icon: HiOutlineShoppingCart },
       { name: "Customer", href: "/customers", icon: IoPeople },
@@ -29,8 +28,6 @@ const Navbar: React.FC = () => {
            ]
          : []),
    ];
-
-  
 
    return (
       <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
