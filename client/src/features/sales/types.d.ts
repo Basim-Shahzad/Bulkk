@@ -14,3 +14,17 @@ export interface Sale {
    soldBy: string;
    createdAt?: string
 }
+
+export interface InvoiceItem {
+   name: string
+   description: string;
+   quantity: number;
+   price: number;
+}
+
+export interface InvoiceData {
+  invoiceNumber: string;
+  clientName: string | undefined;
+  date: string;
+  items: InvoiceItem[];
+}

@@ -1,9 +1,11 @@
 import React, { useMemo } from "react";
-import { CgClose, CgMathMinus, CgMathPlus } from "react-icons/cg";
+import { CgClose } from "react-icons/cg";
 import { useCustomer } from "../../customers/hooks";
 import type { Sale } from "../types";
 import { useProducts } from "../../products/hooks";
-import type { Product } from "../../products/types";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import InvoicePDF from "./InvoicePDF";
+import type { InvoiceData } from "../types";
 
 interface SaleDetailModalProps {
    sale: Sale;
@@ -14,7 +16,6 @@ const SaleDetailModal: React.FC<SaleDetailModalProps> = ({ sale, closeModal }) =
    const { data: customerData } = useCustomer(sale?.customer!);
    const { data: productsData } = useProducts();
 
-   // Map products with their sale details (quantity, unitPrice)
    const saleItemsWithProducts = useMemo(() => {
       if (!productsData?.success || !productsData.products) return [];
 
@@ -28,8 +29,25 @@ const SaleDetailModal: React.FC<SaleDetailModalProps> = ({ sale, closeModal }) =
                subtotal: saleItem.quantity * saleItem.unitPrice,
             };
          })
-         .filter((item) => item.product); // Only include items with valid products
+         .filter((item) => item.product);
    }, [productsData, sale.items]);
+
+   const invoiceData: InvoiceData = useMemo(() => {
+      const suffix = sale._id!.substring(sale._id!.length - 5).toUpperCase();
+      const invNo = `INV-${suffix}`;
+
+      return {
+         invoiceNumber: invNo,
+         clientName: customerData?.customer.name || "Unknown Customer",
+         date: new Date(sale.createdAt || Date.now()).toDateString(),
+         items: saleItemsWithProducts.map((item) => ({
+            name: item.product?.name || "Unknown Product",
+            description: `Standard billing for ${item.product?.name || "Product"} under ${invNo}`,
+            quantity: item.quantity,
+            price: item.unitPrice,
+         })),
+      };
+   }, [sale, customerData, saleItemsWithProducts]);
 
    const totalAmount = useMemo(() => {
       return saleItemsWithProducts.reduce((sum, item) => sum + item.subtotal, 0);
@@ -38,12 +56,6 @@ const SaleDetailModal: React.FC<SaleDetailModalProps> = ({ sale, closeModal }) =
    const itemCount = useMemo(() => {
       return saleItemsWithProducts.reduce((sum, item) => sum + item.quantity, 0);
    }, [saleItemsWithProducts]);
-
-   const handleCreateInvoice = () => {
-      // TODO: Implement invoice creation
-      console.log("Creating invoice for sale:", sale._id);
-      closeModal(false);
-   };
 
    if (!customerData) {
       return (
@@ -77,7 +89,6 @@ const SaleDetailModal: React.FC<SaleDetailModalProps> = ({ sale, closeModal }) =
                   <p className="text-center text-gray-500 py-8">No items in this sale</p>
                ) : (
                   <div className="space-y-3">
-                     {/* Column Headers */}
                      <div className="grid grid-cols-5 gap-2 text-xs font-semibold text-gray-600 px-3 pb-2 border-b">
                         <div>Product</div>
                         <div className="text-right">Unit Price</div>
@@ -86,7 +97,6 @@ const SaleDetailModal: React.FC<SaleDetailModalProps> = ({ sale, closeModal }) =
                         <div></div>
                      </div>
 
-                     {/* Items List */}
                      {saleItemsWithProducts.map((item, index) => (
                         <div
                            key={index}
@@ -99,9 +109,6 @@ const SaleDetailModal: React.FC<SaleDetailModalProps> = ({ sale, closeModal }) =
                               </span>
                            </div>
                            <div className="text-right font-semibold text-gray-900">${item.subtotal.toFixed(2)}</div>
-                           {/* <div className="text-right">
-                              <div className="text-xs text-gray-500">{item.product?.sku || "N/A"}</div>
-                           </div> */}
                         </div>
                      ))}
                   </div>
@@ -131,11 +138,13 @@ const SaleDetailModal: React.FC<SaleDetailModalProps> = ({ sale, closeModal }) =
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
                   Close
                </button>
-               <button
-                  onClick={handleCreateInvoice}
-                  className="flex-1 px-4 py-2 bg-indigo-600 rounded-lg text-white font-medium hover:bg-indigo-700 transition-colors">
-                  Create Invoice
-               </button>
+
+               <PDFDownloadLink
+                  className="flex-1 flex justify-center px-4 py-2 bg-indigo-600 rounded-lg text-white font-medium hover:bg-indigo-700 transition-colors"
+                  document={<InvoicePDF data={invoiceData} />}
+                  fileName={`${invoiceData.invoiceNumber}.pdf`}>
+                  {({ loading }) => (loading ? "Preparing PDF..." : "Download Invoice")}
+               </PDFDownloadLink>
             </div>
          </div>
       </div>
