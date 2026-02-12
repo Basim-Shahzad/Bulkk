@@ -54,18 +54,7 @@ const SalesCreateModal: React.FC<SalesCreateModalProps> = ({ closeModal }) => {
          },
       });
    };
-
-   // const onSubmit: SubmitHandler<Sale> = (data) => {
-   //    createSale(data);
-   //    if (salesData?.success) {
-   //       closeModal(false);
-   //    } else {
-   //       console.log('false hai success')
-   //       console.log(salesData)
-   //       setErrorMessage(salesData?.message || "Something went wrong");
-   //    }
-   // };
-
+   
    return (
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">

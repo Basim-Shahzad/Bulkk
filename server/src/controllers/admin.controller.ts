@@ -78,8 +78,6 @@ export async function getStaff(req: Request, res: Response, next: NextFunction) 
 
       const staff: Staff[] = await User.find({ store: storeId });
 
-      console.log(staff);
-
       res.status(200).json({
          success: true,
          staffCount: staff.length,

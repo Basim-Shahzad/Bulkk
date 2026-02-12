@@ -26,7 +26,7 @@ const SalesTable: React.FC = () => {
 
    return (
       <div className="flex justify-center items-center">
-         <table className="sm:w-11/12 w-1/2 text-left overflow-x-scroll">
+         <table className="sm:w-11/12 w-1/2 text-left overflow-x-auto overflow-scrolling-touch">
             <thead className="bg-blue-600 text-white text-xs uppercase">
                <tr>
                   <th className="px-6 py-3">Customer</th>
