@@ -6,6 +6,13 @@ import { Store } from "../models/store.model";
 import { User, IUser } from "../models/user.model";
 import { signRefreshToken, signAccessToken } from "../utils/jwt";
 import { userForResponse } from "../utils/auth.utils";
+import { JwtPayload } from "jsonwebtoken";
+
+export interface MyJwtPayload extends JwtPayload {
+   userId: string;
+   storeId: string;
+   role: string;
+}
 
 interface CustomError extends Error {
    statusCode?: number;
@@ -128,7 +135,7 @@ export const refresh = (req: Request, res: Response, next: NextFunction) => {
          throw err;
       }
 
-      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET!);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as MyJwtPayload;
 
       const newAccessToken = signAccessToken({
          userId: decoded.userId,
@@ -161,7 +168,7 @@ export const getCurrentUser = async (req: Request, res: Response, next: NextFunc
          throw err;
       }
 
-      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET!);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as MyJwtPayload;
       const user = await User.findById(decoded.userId).populate("store", "name");
 
       const accessToken = signAccessToken({
@@ -183,7 +190,7 @@ export const changePassword = async (req: Request, res: Response, next: NextFunc
    try {
       const { email, oldPassword, newPassword } = req.body;
 
-      const user = await User.findOne({ email }).select('+password');
+      const user = await User.findOne({ email }).select("+password");
       if (!user) {
          const error: CustomError = new Error("User not found");
          error.statusCode = 404;
