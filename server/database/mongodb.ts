@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { DB_URI } from "../config/env";
 
 export const connectToDatabase = async () => {
    try {
+      const DB_URI = process.env.DB_URI
       if (!DB_URI) {
          throw new Error("Please Define DB_URI environment variable");
       }
