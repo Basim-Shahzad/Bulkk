@@ -1,57 +1,70 @@
 import React from "react";
-import { HiOutlineShieldCheck, HiOutlineLightningBolt, HiOutlineDocumentText } from "react-icons/hi";
+import { HiOutlineShieldCheck, HiOutlineLightningBolt, HiOutlineDocumentText, HiArrowRight } from "react-icons/hi";
+import { useAuth } from "../features/auth/hooks";
 
 const Homepage: React.FC = () => {
+   const { isAuthenticated } = useAuth();
+
    return (
-      <div className="pt-20 bg-white">
-         {/* Hero Section */}
-         <section className="px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div className="text-center">
-               <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl">
-                  Inventory management <br />
-                  <span className="text-blue-600">without the headache.</span>
-               </h1>
-               <p className="max-w-2xl mx-auto mt-6 text-lg text-gray-500">
-                  Bulkk helps SMBs prevent overselling, track real-time sales, and generate instant invoices. Scale your
-                  business with data-driven insights.
-               </p>
-               <div className="flex justify-center mt-10 space-x-4">
-                  <button className="px-8 py-3 text-white bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md active:scale-95">
-                     Start Free Trial
-                  </button>
-                  <button className="px-8 py-3 text-blue-600 border border-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-all">
-                     Live Demo
-                  </button>
-               </div>
+      <div className="pt-20 bg-white flex flex-col font-sans">
+         <section className="flex-1 flex flex-col items-center justify-center px-6 text-center z-10">
+            <div className="mb-6 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-bold text-blue-600 uppercase tracking-widest">
+               v1.0 Now Live
+            </div>
+
+            <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-gray-900 leading-[0.9]">
+               Inventory <br />
+               <span className="text-blue-600">Simplified.</span>
+            </h1>
+
+            <p className="max-w-lg mx-auto mt-6 text-lg text-gray-500 font-medium">
+               Prevent overselling and generate instant invoices. <br className="hidden md:block" />
+               The operating system for modern SMBs.
+            </p>
+
+            <div className="flex items-center justify-center mt-10 gap-4">
+               <button className=" cursor-pointer group relative">
+                  <div className="absolute inset-0 bg-blue-600/20 rounded-xl translate-y-1.5 transition-transform group-hover:translate-y-1 group-active:translate-y-0" />
+                  <div className="relative px-8 py-4 bg-blue-600 text-white rounded-xl font-bold flex items-center gap-2 transition-transform group-active:translate-y-1">
+                     Get Started <HiArrowRight />
+                  </div>
+               </button>
+
+               <button className=" cursor-pointer px-8 py-4 text-gray-900 font-bold hover:bg-gray-50 rounded-xl transition-colors">
+                  Live Demo
+               </button>
             </div>
          </section>
 
-         {/* Feature Grid */}
-         <section className="py-12 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
+         <section className="px-6 z-10 mt-16">
+            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
                {[
                   {
-                     title: "Smart Stock Control",
-                     desc: "Real-time alerts before you run out.",
+                     title: "Low-Stock Alerts",
+                     desc: "Custom thresholds to avoid running out of stock.",
                      icon: <HiOutlineShieldCheck />,
                   },
                   {
-                     title: "Instant Invoicing",
+                     title: "Instant Invoices",
                      desc: "Generate professional PDFs in one click.",
                      icon: <HiOutlineDocumentText />,
                   },
                   {
-                     title: "Sales Analytics",
-                     desc: "Track daily and monthly performance.",
+                     title: "Performance",
+                     desc: "Data-driven insights for your business.",
                      icon: <HiOutlineLightningBolt />,
                   },
                ].map((feature, i) => (
                   <div
                      key={i}
-                     className="p-6 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                     <div className="text-blue-600 text-3xl mb-4">{feature.icon}</div>
-                     <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                     <p className="text-gray-600">{feature.desc}</p>
+                     className="flex items-center gap-4 p-5 bg-white/50 backdrop-blur-sm border border-gray-100 rounded-2xl hover:border-blue-200 hover:shadow-sm transition-all">
+                     <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-blue-600 text-white text-xl">
+                        {feature.icon}
+                     </div>
+                     <div>
+                        <h3 className="font-bold text-gray-900">{feature.title}</h3>
+                        <p className="text-sm text-gray-500 leading-tight">{feature.desc}</p>
+                     </div>
                   </div>
                ))}
             </div>
