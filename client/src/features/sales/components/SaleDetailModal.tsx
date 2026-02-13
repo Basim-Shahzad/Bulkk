@@ -15,6 +15,7 @@ interface SaleDetailModalProps {
 const SaleDetailModal: React.FC<SaleDetailModalProps> = ({ sale, closeModal }) => {
    const { data: customerData } = useCustomer(sale?.customer!);
    const { data: productsData } = useProducts();
+   const now = new Date();
 
    const saleItemsWithProducts = useMemo(() => {
       if (!productsData?.success || !productsData.products) return [];
@@ -142,7 +143,7 @@ const SaleDetailModal: React.FC<SaleDetailModalProps> = ({ sale, closeModal }) =
                <PDFDownloadLink
                   className="flex-1 flex justify-center px-4 py-2 bg-indigo-600 rounded-lg text-white font-medium hover:bg-indigo-700 transition-colors"
                   document={<InvoicePDF data={invoiceData} />}
-                  fileName={`${invoiceData.invoiceNumber}.pdf`}>
+                  fileName={`INV-${now.getFullYear()}-${invoiceData.invoiceNumber}.pdf`}>
                   {({ loading }) => (loading ? "Preparing PDF..." : "Download Invoice")}
                </PDFDownloadLink>
             </div>
