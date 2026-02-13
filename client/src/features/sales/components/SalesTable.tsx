@@ -2,7 +2,6 @@ import React, { useMemo, useState } from "react";
 import { useSales } from "../hooks";
 import { useCustomers } from "../../customers/hooks";
 import SaleDetailModal from "./SaleDetailModal";
-import { SiSalesforce } from "react-icons/si";
 
 const SalesTable: React.FC = () => {
    const { data, error, isLoading } = useSales();

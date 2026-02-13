@@ -1,9 +1,7 @@
 import React from "react";
 import { HiOutlineShieldCheck, HiOutlineLightningBolt, HiOutlineDocumentText, HiArrowRight } from "react-icons/hi";
-import { useAuth } from "../features/auth/hooks";
 
 const Homepage: React.FC = () => {
-   const { isAuthenticated } = useAuth();
 
    return (
       <div className="pt-20 bg-white flex flex-col font-sans">

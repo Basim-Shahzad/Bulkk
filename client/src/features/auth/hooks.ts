@@ -1,8 +1,7 @@
-import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { AuthContext } from "./AuthContext";
 import { authApi } from "./api";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 
 export function useAuth() {
    const context = useContext(AuthContext);
@@ -15,8 +14,6 @@ export function useAuth() {
 }
 
 export const useSignup = () => {
-   const queryClient = useQueryClient();
-   const navigate = useNavigate();
    const { setUser, setAccessToken } = useAuth();
    return useMutation({
       mutationFn: authApi.signup,
@@ -29,8 +26,6 @@ export const useSignup = () => {
 };
 
 export const useLogin = () => {
-   const queryClient = useQueryClient();
-   const navigate = useNavigate();
    const { setUser, setAccessToken } = useAuth();
    return useMutation({
       mutationFn: authApi.login,
@@ -44,7 +39,6 @@ export const useLogin = () => {
 
 export const useLogout = () => {
    const queryClient = useQueryClient();
-   const navigate = useNavigate();
    const { setUser, setAccessToken } = useAuth();
 
    return useMutation({
@@ -58,8 +52,6 @@ export const useLogout = () => {
 };
 
 export const useChangePassword = () => {
-   const queryClient = useQueryClient();
-   const navigate = useNavigate();
    const { setUser } = useAuth();
    return useMutation({
       mutationFn: authApi.changePassword,

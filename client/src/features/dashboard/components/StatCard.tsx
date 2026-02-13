@@ -1,5 +1,4 @@
 import React from "react";
-import { HiOutlineTrendingUp, HiOutlineTrendingDown } from "react-icons/hi";
 
 interface StatCardProps {
    title: string;
@@ -11,7 +10,7 @@ interface StatCardProps {
    currencyRel?: boolean;
 }
 
-export const StatCard: React.FC<StatCardProps> = ({ title, value, change, isUp, icon, isLoading, currencyRel }) => {
+export const StatCard: React.FC<StatCardProps> = ({ title, value, icon, isLoading, currencyRel }) => {
    if (isLoading) {
       return "Loading";
    }

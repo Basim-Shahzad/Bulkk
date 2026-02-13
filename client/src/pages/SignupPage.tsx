@@ -17,7 +17,7 @@ const SignupPage: React.FC = () => {
       handleSubmit,
       formState: { errors },
    } = useForm<SignupFormData>();
-   const { mutate: signup, isLoading } = useSignup();
+   const { mutate: signup, isPending } = useSignup();
    const { user, isAuthenticated } = useAuth();
    const navigate = useNavigate();
 
@@ -114,7 +114,7 @@ const SignupPage: React.FC = () => {
                <button
                   type="submit"
                   className="w-full mt-6 px-8 py-3 text-white bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md active:scale-95">
-                  {isLoading ? "Signing up…" : "Sign Up"}
+                  {isPending ? "Signing up…" : "Sign Up"}
                </button>
             </form>
 

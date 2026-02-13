@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { HiOutlineMap, HiOutlineLockClosed } from "react-icons/hi2";
 import { useLogin } from "../features/auth/hooks";
-import { useAuth, useSignup } from "../features/auth/hooks";
+import { useAuth } from "../features/auth/hooks";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +16,7 @@ const LoginPage: React.FC = () => {
       handleSubmit,
       formState: { errors },
    } = useForm<LoginFormData>();
-   const { mutate: login, isLoading } = useLogin();
+   const { mutate: login, isPending } = useLogin();
    const { user, isAuthenticated } = useAuth();
    const navigate = useNavigate();
 
@@ -83,7 +83,7 @@ const LoginPage: React.FC = () => {
                <button
                   type="submit"
                   className="w-full mt-6 px-8 py-3 text-white bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md active:scale-95">
-                  {isLoading ? "Logging in" : "Log In"}
+                  {isPending ? "Logging in" : "Log In"}
                </button>
             </form>
 

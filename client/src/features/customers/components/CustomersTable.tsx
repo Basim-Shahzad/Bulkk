@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { useCustomers } from "../hooks";
-import type { Customer } from "../types";
 
 const CustomersTable: React.FC = () => {
    const { data, error, isLoading } = useCustomers();

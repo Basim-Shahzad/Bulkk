@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useSalesReport } from "../hooks";
 
@@ -16,7 +16,7 @@ const SalesReportGraph = () => {
          // Show 12 Months
          return MONTHS.map((monthName, index) => {
             const monthNum = (index + 1).toString().padStart(2, "0");
-            const found = rawData.find((d: any) => d._id === monthNum);
+            const found: any = rawData.find((d: any) => d._id === monthNum); // temp any change it later
             return { label: monthName, total: found ? found.total : 0 };
          });
       } else {
@@ -26,7 +26,7 @@ const SalesReportGraph = () => {
 
          return Array.from({ length: daysInMonth }, (_, i) => {
             const dayNum = i + 1;
-            const found = rawData.find((d: any) => parseInt(d._id) === dayNum);
+            const found: any = rawData.find((d: any) => parseInt(d._id) === dayNum); // temp any change it later
             return {
                label: dayNum.toString().padStart(2, "0"),
                total: found ? found.total : 0,
@@ -71,7 +71,8 @@ const SalesReportGraph = () => {
                   tick={{ fill: "#64748b", fontSize: 12 }}
                   tickFormatter={(val) => `$${val > 1000 ? (val / 1000).toFixed(0) + "k" : val}`}
                />
-               <Tooltip formatter={(val: number) => [`$${val.toLocaleString()}`, "Revenue"]} />
+               <Tooltip formatter={(val: any) => [`$${val.toLocaleString()}`, "Revenue"]} /> 
+                  {/* temp any change it later */}
                <Line
                   type="monotone"
                   dataKey="total"

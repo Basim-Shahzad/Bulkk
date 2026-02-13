@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { HiOutlineCube, HiOutlineCash, HiOutlineUsers } from "react-icons/hi";
 import { IoPeople } from "react-icons/io5";
 import { useProducts } from "../features/products/hooks";

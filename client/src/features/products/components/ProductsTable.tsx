@@ -1,7 +1,5 @@
 import React, { useMemo, useState } from "react";
 import { useProducts } from "../hooks";
-import type { Product } from "../types";
-import ProductCreateModal from "./ProductCreateModal";
 import ProductDetailModal from "./ProductDetailModal";
 import { getStockStatus } from "../../../utils/utilsFunctions";
 

@@ -23,7 +23,7 @@ export const staffApi = {
       const { data } = await api.get<StaffResponse>("/staff");
       return data;
    },
-   createStaff: async (staffData: Partial<User>): Promise<User> => {
+   createStaff: async (staffData: Partial<User>) => {
       const { data } = await api.post<StaffMemberResponse>("/staff", staffData);
       return data;
    },

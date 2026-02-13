@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import type { Sale } from "../features/sales/types";
-import { useCreateSale } from "../features/sales/hooks";
+import { useState } from "react";
 import SalesFuntions from "../features/sales/components/SalesFunctions";
 import SalesCreateModal from "../features/sales/components/SalesCreateModal";
 import SalesTable from "../features/sales/components/SalesTable";

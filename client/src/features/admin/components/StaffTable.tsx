@@ -1,9 +1,8 @@
 import React from "react";
-import type { User } from "../../auth/types";
 import { useStaff } from "../hooks";
 
 const StaffTable: React.FC = () => {
-   const { data: staff, isLoading: staffLoading, error: staffError } = useStaff()
+   const { data: staff, isLoading: staffLoading } = useStaff()
 
    if (staffLoading || !staff) {
       return 'Loading'

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { Product } from "../features/products/types";
 import ProductsTable from "../features/products/components/ProductsTable";
 import ProductsFuntions from "../features/products/components/ProductsFuntions";

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { NavLink, Link, href } from "react-router-dom";
-import { HiOutlineMenuAlt2, HiOutlineX, HiOutlineChartBar, HiOutlineCube, HiOutlineShoppingCart } from "react-icons/hi";
+import { NavLink, Link } from "react-router-dom";
+import { HiOutlineMenuAlt2, HiOutlineX, HiOutlineChartBar, HiOutlineShoppingCart } from "react-icons/hi";
 import { IoPeople } from "react-icons/io5";
 import { GrUserAdmin } from "react-icons/gr";
-import { useAuth, useLogout } from "../features/auth/hooks";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../features/auth/hooks";
 import ProfileModal from "../features/auth/components/ProfileModal";
 
 const Navbar: React.FC = () => {
@@ -12,7 +11,6 @@ const Navbar: React.FC = () => {
    const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false)
    const { isAuthenticated, user } = useAuth();
 
-   const navigate = useNavigate();
    const navigation = [
       { name: "Dashboard", href: "/dashboard", icon: HiOutlineChartBar },
       { name: "Sales", href: "/sales", icon: HiOutlineShoppingCart },

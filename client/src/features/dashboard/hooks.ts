@@ -1,6 +1,6 @@
 import { dashboardApi } from "./api";
 import { useAuth } from "../auth/hooks";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export const useSalesReport = (timeInterval: "monthly" | "yearly" = "monthly") => {
    const { isAuthenticated } = useAuth();

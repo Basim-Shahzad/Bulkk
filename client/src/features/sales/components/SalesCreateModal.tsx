@@ -16,7 +16,7 @@ const SalesCreateModal: React.FC<SalesCreateModalProps> = ({ closeModal }) => {
    const { user } = useAuth();
    const { data: productsData, isLoading: pLoading } = useProducts();
    const { data: customersData, isLoading: cLoading } = useCustomers();
-   const { mutate: createSale, isSuccess } = useCreateSale();
+   const { mutate: createSale } = useCreateSale();
    const [errorMessage, setErrorMessage] = React.useState<string>("");
 
    const {

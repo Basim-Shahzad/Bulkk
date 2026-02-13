@@ -1,5 +1,5 @@
 import api from "../../services/api";
-import type { Sale, SaleItem } from "./types";
+import type { Sale } from "./types";
 
 export interface SalesResponse {
    success: boolean;

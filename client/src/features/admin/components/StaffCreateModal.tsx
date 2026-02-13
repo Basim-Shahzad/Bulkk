@@ -2,7 +2,6 @@ import React from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { CgClose } from "react-icons/cg";
 import type { User } from "../../auth/types";
-import { useAuth } from "../../auth/hooks";
 
 interface StaffCreateModalProps {
    closeModal: (value: boolean) => void;
@@ -10,7 +9,6 @@ interface StaffCreateModalProps {
 }
 
 const StaffCreateModal: React.FC<StaffCreateModalProps> = ({ closeModal, onCreate }) => {
-   const { user } = useAuth();
    const {
       register,
       handleSubmit,
