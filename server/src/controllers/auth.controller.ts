@@ -70,8 +70,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
       res.cookie("refreshToken", refreshToken, {
          httpOnly: true,
          secure: true,
-         sameSite: "strict",
-         path: "/",
+         sameSite: "none",
       })
          .status(201)
          .json({
@@ -113,8 +112,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       res.cookie("refreshToken", refreshToken, {
          httpOnly: true,
          secure: true,
-         sameSite: "strict",
-         path: "/",
+         sameSite: "none",
       })
          .status(200)
          .json({
