@@ -8,7 +8,7 @@ const AdminPage = () => {
    const [isCreateModalOpen, setIsCreateModalOpen] = React.useState<boolean>(false);
    const { mutate: createStaff, isSuccess } = useCreateStaff();
 
-   const handleCreateStaff = async (newStaffMember) => {
+   const handleCreateStaff = async (newStaffMember: any) => { // temp any change it later
       try {
          createStaff(newStaffMember);
          if (isSuccess) setIsCreateModalOpen(false);
