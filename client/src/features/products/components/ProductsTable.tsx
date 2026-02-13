@@ -50,10 +50,14 @@ const ProductsTable: React.FC = () => {
                      <td className="px-3 py-2 text-gray-600">{prod.quantity} units</td>
                      <td className="px-3 py-2 text-gray-600">${prod.price}</td>
                      <td className={``}>
-                        <p
-                           className={`text-${getStockStatus(prod)?.color}-600 font-semibold bg-${getStockStatus(prod)?.color}-100 w-max px-1.5 py-0.5 rounded-2xl`}>
-                           {getStockStatus(prod)?.text}
-                        </p>
+                        {(() => {
+                           const status = getStockStatus(prod);
+                           return (
+                              <p className={`${status.className} font-semibold w-max px-1.5 py-0.5 rounded-2xl`}>
+                                 {status.text}
+                              </p>
+                           );
+                        })()}
                      </td>
                   </tr>
                ))}

@@ -1,27 +1,27 @@
 import type { Product } from "../features/products/types";
 
-export function getStockStatus(product: Product):
-   | {
-        text: string;
-        color: string;
-     }
-   | undefined {
-   if (product.quantity === 0) {
+interface StockStatus {
+   text: string;
+   className: string;
+}
+
+export function getStockStatus(product: Product): StockStatus {
+   if (product.quantity <= 0) {
       return {
          text: "Out of Stock",
-         color: "red",
+         className: "text-red-600 bg-red-100",
       };
    }
-   if (product.minimumStockLevel && product.minimumStockLevel < product.quantity) {
-      return {
-         text: "In Stock",
-         color: "green",
-      };
-   }
-   if (product.minimumStockLevel && product.minimumStockLevel > product.price) {
+
+   if (product.minimumStockLevel && product.quantity <= product.minimumStockLevel) {
       return {
          text: "Low Stock",
-         color: "orange",
+         className: "text-orange-600 bg-orange-100",
       };
    }
+   
+   return {
+      text: "In Stock",
+      className: "text-green-600 bg-green-100",
+   };
 }
