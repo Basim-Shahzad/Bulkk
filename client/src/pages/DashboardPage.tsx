@@ -8,6 +8,7 @@ import { StatCard } from "../features/dashboard/components/StatCard";
 import { getStockStatus } from "../utils/utilsFunctions";
 import type { Product } from "../features/products/types";
 import { Link } from "react-router-dom";
+import SalesReportGraph from "../features/dashboard/components/SalesReportGraph";
 
 const Dashboard: React.FC = () => {
    const { data: customersData, isLoading: customersLoading } = useCustomers();
@@ -66,7 +67,7 @@ const Dashboard: React.FC = () => {
       <div className="py-4 px-12 lg:ml-0 mx-auto">
          <div className="mb-8">
             <h1 className="text-2xl font-bold text-gray-900">Store Overview</h1>
-            <p className="text-gray-500">Welcome back, here is what is happening today.</p>
+            <p className="text-gray-500">Welcome back, here is what is happening.</p>
          </div>
 
          {/* Stats Grid */}
@@ -79,14 +80,6 @@ const Dashboard: React.FC = () => {
                icon={<HiOutlineCash size={24} />}
                isLoading={salesLoading}
                currencyRel
-            />
-            <StatCard
-               title="Returning Customers"
-               value={returningCustomers}
-               change="8%"
-               isUp={true}
-               icon={<IoPeople size={24} />}
-               isLoading={customersLoading}
             />
             <StatCard
                title="Items in Stock"
@@ -105,18 +98,28 @@ const Dashboard: React.FC = () => {
                icon={<HiOutlineUsers size={24} />}
                isLoading={customersLoading}
             />
+            <StatCard
+               title="Returning Customers"
+               value={returningCustomers}
+               change="8%"
+               isUp={true}
+               icon={<IoPeople size={24} />}
+               isLoading={customersLoading}
+            />
          </div>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Inventory Alert Table */}
             <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
                <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                   <h2 className="font-bold text-gray-800">Low Stock Alerts</h2>
-                  <Link to={'/products'} className="text-sm text-blue-600 font-medium hover:underline">View All</Link>
+                  <Link to={"/products"} className="text-sm text-blue-600 font-medium hover:underline">
+                     View All
+                  </Link>
                </div>
                <div className="overflow-x-auto">
                   <table className="w-full text-left">
-                     <thead className="bg-gray-50 text-gray-500 text-xs uppercase">
+                     <thead className="bg-blue-600 text-white text-xs uppercase">
                         <tr>
                            <th className="px-6 py-3">Product</th>
                            <th className="px-6 py-3">Current Stock</th>
@@ -129,10 +132,15 @@ const Dashboard: React.FC = () => {
                               <td className="px-6 py-4 font-medium text-gray-900">{product.name}</td>
                               <td className="px-6 py-4 text-gray-600">{product.quantity} units</td>
                               <td className="px-6 py-4">
-                                 <span
-                                    className={`px-1.5 py-0.5 font-semibold rounded-full text-${getStockStatus(product)?.color}-600 font-semibold bg-${getStockStatus(product)?.color}-100`}>
-                                    {getStockStatus(product)?.text ? getStockStatus(product)?.text : 'Low Stock'}
-                                 </span>
+                                 {(() => {
+                                    const status = getStockStatus(product);
+                                    return (
+                                       <span
+                                          className={`px-1.5 py-0.5 font-semibold rounded-full ${status.className} font-semibold`}>
+                                          {status.text}
+                                       </span>
+                                    );
+                                 })()}
                               </td>
                            </tr>
                         ))}
@@ -141,17 +149,8 @@ const Dashboard: React.FC = () => {
                </div>
             </div>
 
-            {/* Quick Actions / Recent Activity Placeholder */}
-            <div className="bg-blue-600 rounded-xl p-8 text-white flex flex-col justify-between">
-               <div>
-                  <h2 className="text-2xl font-bold mb-2">Generate Invoice</h2>
-                  <p className="text-blue-100 mb-6">
-                     Create and send professional invoices to your customers in seconds.
-                  </p>
-               </div>
-               <Link to={"/sales"} className="w-full flex justify-center cursor-pointer bg-white text-blue-600 font-bold py-3 rounded-lg hover:bg-blue-50 transition-colors">
-                  + New Sale
-               </Link>
+            <div className="rounded-xl flex flex-col justify-between">
+               <SalesReportGraph />
             </div>
          </div>
       </div>
