@@ -10,6 +10,6 @@
       "skipLibCheck": true, // Speeds up compilation
       "forceConsistentCasingInFileNames": true
    },
-   "include": ["src/**/*", "config"], // Tells TS to only look inside 'src'
+   "include": ["src/**/*", "src/config"], // Tells TS to only look inside 'src'
    "exclude": ["node_modules"]
 }
