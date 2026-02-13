@@ -7,7 +7,7 @@ import customerRoutes from "./routes/customer.routes";
 import adminRoutes from "./routes/admin.routes";
 import salesRoutes from "./routes/sale.routes";
 import reportsRoutes from "./routes/reports.routes";
-import { connectToDatabase } from "../database/mongodb";
+import { connectToDatabase } from "./database/mongodb";
 import errorMiddleware from "./middleware/errors.middleware";
 
 const app: Application = express();
