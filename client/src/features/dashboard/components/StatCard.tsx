@@ -2,15 +2,14 @@ import React from "react";
 
 interface StatCardProps {
    title: string;
-   value: number;
+   value: string;
    change: string;
    isUp: boolean;
    icon: React.ReactNode;
    isLoading: boolean;
-   currencyRel?: boolean;
 }
 
-export const StatCard: React.FC<StatCardProps> = ({ title, value, icon, isLoading, currencyRel }) => {
+export const StatCard: React.FC<StatCardProps> = ({ title, value, icon, isLoading }) => {
    if (isLoading) {
       return "Loading";
    }
@@ -26,7 +25,6 @@ export const StatCard: React.FC<StatCardProps> = ({ title, value, icon, isLoadin
          </div>
          <h3 className="text-gray-500 text-sm font-medium">{title}</h3>
          <p className="text-2xl font-bold text-gray-900 mt-1">
-            {currencyRel ? "$" : ""}
             {value}
          </p>
       </div>

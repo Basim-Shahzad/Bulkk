@@ -63,6 +63,15 @@ const Dashboard: React.FC = () => {
       [productsData],
    );
 
+   const formatUSD = (amount: number) => {
+      return new Intl.NumberFormat("en-US", {
+         style: "currency",
+         currency: "USD",
+         minimumFractionDigits: 2,
+         maximumFractionDigits: 2,
+      }).format(amount);
+   };
+
    return (
       <div className="py-4 px-12 lg:ml-0 mx-auto">
          <div className="mb-8">
@@ -74,25 +83,23 @@ const Dashboard: React.FC = () => {
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <StatCard
                title="Total Sales"
-               value={salesTotal!}
+               value={formatUSD(salesTotal!)}
                change="12%"
                isUp={true}
                icon={<HiOutlineCash size={24} />}
                isLoading={salesLoading}
-               currencyRel
             />
             <StatCard
                title="Items in Stock"
-               value={itemsInStockTotal!}
+               value={formatUSD(itemsInStockTotal!)}
                change="3%"
                isUp={false}
                icon={<HiOutlineCube size={24} />}
                isLoading={productsLoading}
-               currencyRel
             />
             <StatCard
                title="New Customers"
-               value={newCustomerTotal!}
+               value={newCustomerTotal.toString()}
                change="18%"
                isUp={true}
                icon={<HiOutlineUsers size={24} />}
@@ -100,7 +107,7 @@ const Dashboard: React.FC = () => {
             />
             <StatCard
                title="Returning Customers"
-               value={returningCustomers}
+               value={returningCustomers.toString()}
                change="8%"
                isUp={true}
                icon={<IoPeople size={24} />}
