@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -39,12 +40,18 @@ app.get("/", (req: Request, res: Response) => {
    res.send("Server is running!");
 });
 
-app.listen(PORT, async () => {
-   console.log(`Server blasting off at http://localhost:${PORT}`);
+const startServer = async () => {
    try {
       await connectToDatabase();
       console.log("Database connected successfully");
+
+      app.listen(PORT, () => {
+         console.log(`Server blasting off at http://localhost:${PORT}`);
+      });
    } catch (error) {
-      console.error("Database connection failed during startup", error);
+      console.error("Failed to start server:", error);
+      process.exit(1);
    }
-});
+};
+
+startServer();
