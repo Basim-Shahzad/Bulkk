@@ -10,6 +10,7 @@ import Dashboard from "./pages/DashboardPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import CustomersPage from "./pages/CustomersPage";
+import ProtectedRoute from "./features/auth/components/ProtectedRoute";
 
 // Provides
 import { AuthProvider } from "./features/auth/AuthContext";
@@ -39,27 +40,35 @@ const router = createBrowserRouter([
          },
          {
             path: "dashboard",
-            element: <Dashboard />,
-         },
-         {
-            path: "inventory",
-            element: <div className="p-8">Inventory Module (Coming Soon)</div>,
+            element: (
+               <ProtectedRoute>
+                  <Dashboard />
+               </ProtectedRoute>
+            ),
          },
          {
             path: "products",
-            element: <ProductsPage />,
+            element: (
+               <ProtectedRoute>
+                  <ProductsPage />
+               </ProtectedRoute>
+            ),
          },
          {
             path: "customers",
-            element: <CustomersPage />,
+            element: (
+               <ProtectedRoute>
+                  <CustomersPage />
+               </ProtectedRoute>
+            ),
          },
          {
             path: "sales",
-            element: <SalesPage />,
-         },
-         {
-            path: "admin",
-            element: <AdminPage />,
+            element: (
+               <ProtectedRoute>
+                  <SalesPage />
+               </ProtectedRoute>
+            ),
          },
       ],
    },
