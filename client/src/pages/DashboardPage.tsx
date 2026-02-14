@@ -4,15 +4,16 @@ import { useProducts } from "../features/products/hooks";
 import { useSales } from "../features/sales/hooks";
 import { useCustomers } from "../features/customers/hooks";
 import { StatCard } from "../features/dashboard/components/StatCard";
-import { getStockStatus } from "../utils/utilsFunctions";
-import type { Product } from "../features/products/types";
-import { Link } from "react-router-dom";
 import SalesReportGraph from "../features/dashboard/components/SalesReportGraph";
+import { useAuth } from "../features/auth/hooks";
+import ProductsPieChart from "../features/dashboard/components/ProductsPieChart";
+import LowStockAlertTable from "../features/dashboard/components/LowStockAlertTable";
 
 const Dashboard: React.FC = () => {
    const { data: customersData, isLoading: customersLoading } = useCustomers();
    const { data: productsData, isLoading: productsLoading } = useProducts();
    const { data: salesData, isLoading: salesLoading } = useSales();
+   const { user } = useAuth();
 
    const salesTotal = useMemo(() => salesData?.sales.reduce((total, sale) => total + sale.totalAmount, 0), [salesData]);
 
@@ -39,14 +40,6 @@ const Dashboard: React.FC = () => {
       );
    }, [customersData]);
 
-   const lowStockProducts: Product[] = useMemo(
-      () =>
-         productsData?.products.filter(
-            (product) => product.minimumStockLevel && product.minimumStockLevel > product.quantity,
-         ) || [],
-      [productsData],
-   );
-
    const formatUSD = (amount: number) => {
       return new Intl.NumberFormat("en-US", {
          style: "currency",
@@ -57,94 +50,68 @@ const Dashboard: React.FC = () => {
    };
 
    return (
-      <div className="py-4 px-12 lg:ml-0 mx-auto">
-         <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">Store Overview</h1>
-            <p className="text-gray-500">Welcome back, here is what is happening.</p>
+      <div className="h-screen flex flex-col py-4 px-4 sm:px-6 lg:px-8 overflow-hidden">
+         <div className="mb-4 flex-shrink-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Store Overview</h1>
+            <p className="text-sm sm:text-base text-gray-500">Welcome back, {user?.name}. Here is your summary.</p>
          </div>
 
-         {/* Stats Grid */}
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <StatCard
-               title="Total Sales"
-               value={formatUSD(salesTotal!)}
-               change="12%"
-               isUp={true}
-               icon={<HiOutlineCash size={24} />}
-               isLoading={salesLoading}
-               gradient="blue"
-            />
-            <StatCard
-               title="Items in Stock"
-               value={formatUSD(itemsInStockTotal!)}
-               change="3%"
-               isUp={false}
-               icon={<HiOutlineCube size={24} />}
-               isLoading={productsLoading}
-               gradient="lightBlue"
-            />
-            <StatCard
-               title="New Customers"
-               value={newCustomerTotal.toString()}
-               change="18%"
-               isUp={true}
-               icon={<HiOutlineUsers size={24} />}
-               isLoading={customersLoading}
-               gradient="purple"
-            />
-            <div className="h-full grid gap-0.5" >
-               <button className="bg-blue-600 w-full flex items-center justify-center hover:bg-blue-700 px-4 py-1.5 text-lg text-white cursor-pointer rounded-lg transition-all duration-150">
-                  Add a Staff Member
-               </button>
-               <button className="bg-blue-600 w-full flex items-center justify-center hover:bg-blue-700 px-4 py-1.5 text-lg text-white cursor-pointer rounded-lg transition-all duration-150">
-                  Add a Customer
-               </button>
-            </div>
-         </div>
-
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Inventory Alert Table */}
-            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-               <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                  <h2 className="font-bold text-gray-800">Low Stock Alerts</h2>
-                  <Link to={"/products"} className="text-sm text-blue-600 font-medium hover:underline">
-                     View All
-                  </Link>
+         <div className="flex-1 min-h-0 grid grid-cols-1 xl:grid-cols-2 gap-4 overflow-auto">
+            {/* Left Column */}
+            <div className="flex flex-col gap-4 min-h-0">
+               {/* Sales Graph */}
+               <div className="flex-1 min-h-[300px]">
+                  <SalesReportGraph />
                </div>
-               <div className="overflow-x-auto">
-                  <table className="w-full text-left">
-                     <thead className="bg-blue-600 text-white text-xs uppercase">
-                        <tr>
-                           <th className="px-6 py-3">Product</th>
-                           <th className="px-6 py-3">Current Stock</th>
-                           <th className="px-6 py-3">Status</th>
-                        </tr>
-                     </thead>
-                     <tbody className="divide-y divide-gray-200">
-                        {lowStockProducts.map((product) => (
-                           <tr key={product._id} className="hover:bg-gray-50 transition-colors">
-                              <td className="px-6 py-4 font-medium text-gray-900">{product.name}</td>
-                              <td className="px-6 py-4 text-gray-600">{product.quantity} units</td>
-                              <td className="px-6 py-4">
-                                 {(() => {
-                                    const status = getStockStatus(product);
-                                    return (
-                                       <span
-                                          className={`px-1.5 py-0.5 font-semibold rounded-full ${status.className} font-semibold`}>
-                                          {status.text}
-                                       </span>
-                                    );
-                                 })()}
-                              </td>
-                           </tr>
-                        ))}
-                     </tbody>
-                  </table>
+
+               {/* Low Stock Alert Table */}
+               <div className="flex-1 min-h-[250px]">
+                  <LowStockAlertTable productsData={productsData!} productsLoading={productsLoading} />
                </div>
             </div>
 
-            <div className="rounded-xl flex flex-col justify-between">
-               <SalesReportGraph />
+            {/* Right Column */}
+            <div className="flex flex-col gap-4 min-h-0">
+               {/* Stat Cards */}
+               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                  <StatCard
+                     title="Total Sales"
+                     value={formatUSD(salesTotal!)}
+                     change="12%"
+                     isUp={true}
+                     icon={<HiOutlineCash size={24} />}
+                     isLoading={salesLoading}
+                     gradient="blue"
+                  />
+                  <StatCard
+                     title="Items in Stock"
+                     value={formatUSD(itemsInStockTotal!)}
+                     change="3%"
+                     isUp={false}
+                     icon={<HiOutlineCube size={24} />}
+                     isLoading={productsLoading}
+                     gradient="lightBlue"
+                  />
+                  <StatCard
+                     title="New Customers"
+                     value={newCustomerTotal.toString()}
+                     change="18%"
+                     isUp={true}
+                     icon={<HiOutlineUsers size={24} />}
+                     isLoading={customersLoading}
+                     gradient="purple"
+                  />
+               </div>
+
+               {/* Products Pie Chart */}
+               <div className="flex-1 min-h-[300px]">
+                  <ProductsPieChart
+                     productsData={productsData!}
+                     productsLoading={productsLoading}
+                     salesData={salesData!}
+                     salesLoading={salesLoading}
+                  />
+               </div>
             </div>
          </div>
       </div>

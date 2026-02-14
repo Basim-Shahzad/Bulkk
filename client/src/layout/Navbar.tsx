@@ -8,11 +8,19 @@ import ProfileModal from "../features/auth/components/ProfileModal";
 
 const Navbar: React.FC = () => {
    const [isOpen, setIsOpen] = useState(false);
-   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false)
+   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
    const { isAuthenticated, user } = useAuth();
 
    const navigation = [
-      { name: "Dashboard", href: "/dashboard", icon: HiOutlineChartBar },
+      ...(user?.role === "admin"
+         ? [
+              {
+                 name: "Dashboard",
+                 href: "/dashboard",
+                 icon: HiOutlineChartBar,
+              },
+           ]
+         : []),
       { name: "Sales", href: "/sales", icon: HiOutlineShoppingCart },
       { name: "Products", href: "/products", icon: HiOutlineShoppingCart },
       { name: "Customer", href: "/customers", icon: IoPeople },
@@ -55,13 +63,12 @@ const Navbar: React.FC = () => {
                      ))}
                      <div className="flex gap-2">
                         {isAuthenticated && user ? (
-                           <div className="flex gap-2">
+                           <div className="flex gap-4 items-center">
                               <div
                                  onClick={() => setIsProfileModalOpen(true)}
                                  className="bg-blue-600 rounded-full w-10 h-10 text-white flex justify-center items-center text-xl cursor-pointer">
                                  {user.name[0].toUpperCase()}
                               </div>
-
                            </div>
                         ) : (
                            <div className="flex gap-2">
