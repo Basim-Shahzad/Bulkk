@@ -133,7 +133,7 @@ export const refresh = (req: Request, res: Response, next: NextFunction) => {
          throw err;
       }
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as MyJwtPayload;
+      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET!) as MyJwtPayload;
 
       const newAccessToken = signAccessToken({
          userId: decoded.userId,
@@ -166,7 +166,7 @@ export const getCurrentUser = async (req: Request, res: Response, next: NextFunc
          throw err;
       }
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as MyJwtPayload;
+      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET!) as MyJwtPayload;
       const user = await User.findById(decoded.userId).populate("store", "name");
 
       const accessToken = signAccessToken({
