@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { HiOutlineCube, HiOutlineCash, HiOutlineUsers } from "react-icons/hi";
-import { IoPeople } from "react-icons/io5";
 import { useProducts } from "../features/products/hooks";
 import { useSales } from "../features/sales/hooks";
 import { useCustomers } from "../features/customers/hooks";
@@ -40,21 +39,6 @@ const Dashboard: React.FC = () => {
       );
    }, [customersData]);
 
-   const returningCustomers = useMemo(() => {
-      if (!salesData?.sales) return 0;
-
-      const customerSalesCount = new Map<string, number>();
-
-      for (const sale of salesData.sales) {
-         const customerId = sale.customer;
-         if (!customerId) continue;
-
-         customerSalesCount.set(customerId, (customerSalesCount.get(customerId) ?? 0) + 1);
-      }
-
-      return Array.from(customerSalesCount.values()).filter((count) => count > 1).length;
-   }, [salesData]);
-
    const lowStockProducts: Product[] = useMemo(
       () =>
          productsData?.products.filter(
@@ -88,6 +72,7 @@ const Dashboard: React.FC = () => {
                isUp={true}
                icon={<HiOutlineCash size={24} />}
                isLoading={salesLoading}
+               gradient="blue"
             />
             <StatCard
                title="Items in Stock"
@@ -96,6 +81,7 @@ const Dashboard: React.FC = () => {
                isUp={false}
                icon={<HiOutlineCube size={24} />}
                isLoading={productsLoading}
+               gradient="lightBlue"
             />
             <StatCard
                title="New Customers"
@@ -104,15 +90,16 @@ const Dashboard: React.FC = () => {
                isUp={true}
                icon={<HiOutlineUsers size={24} />}
                isLoading={customersLoading}
+               gradient="purple"
             />
-            <StatCard
-               title="Returning Customers"
-               value={returningCustomers.toString()}
-               change="8%"
-               isUp={true}
-               icon={<IoPeople size={24} />}
-               isLoading={customersLoading}
-            />
+            <div className="h-full grid gap-0.5" >
+               <button className="bg-blue-600 w-full flex items-center justify-center hover:bg-blue-700 px-4 py-1.5 text-lg text-white cursor-pointer rounded-lg transition-all duration-150">
+                  Add a Staff Member
+               </button>
+               <button className="bg-blue-600 w-full flex items-center justify-center hover:bg-blue-700 px-4 py-1.5 text-lg text-white cursor-pointer rounded-lg transition-all duration-150">
+                  Add a Customer
+               </button>
+            </div>
          </div>
 
          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
