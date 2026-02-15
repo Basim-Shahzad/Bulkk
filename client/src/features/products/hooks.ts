@@ -2,6 +2,8 @@ import { productApi } from "./api";
 import { useAuth } from "../auth/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Product } from "./types";
+import { useContext } from "react";
+import { ProductContext } from "./components/ProductContext";
 
 export const useProducts = () => {
    const { isAuthenticated } = useAuth();
@@ -55,7 +57,7 @@ export const useProductUpdate = () => {
          productApi.updateProduct(id, productData),
       onSuccess: (data) => {
          queryClient.invalidateQueries({ queryKey: ["products"] });
-         queryClient.invalidateQueries({ queryKey: ["product", data.product._id] })
+         queryClient.invalidateQueries({ queryKey: ["product", data.product._id] });
       },
    });
 };
@@ -88,4 +90,14 @@ export const useDecreaseStock = () => {
          });
       },
    });
+};
+
+export const useProductFilters = () => {
+   const context = useContext(ProductContext);
+
+   if (!context) {
+      throw new Error("useProductContext must be used within ProductProvider");
+   }
+
+   return context;
 };

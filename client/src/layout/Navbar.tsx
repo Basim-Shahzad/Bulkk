@@ -24,15 +24,6 @@ const Navbar: React.FC = () => {
       { name: "Sales", href: "/sales", icon: HiOutlineShoppingCart },
       { name: "Products", href: "/products", icon: HiOutlineShoppingCart },
       { name: "Customer", href: "/customers", icon: IoPeople },
-      ...(user?.role === "admin"
-         ? [
-              {
-                 name: "Admin",
-                 href: "/admin",
-                 icon: GrUserAdmin,
-              },
-           ]
-         : []),
    ];
 
    return (
