@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { HiOutlineMenuAlt2, HiOutlineX, HiOutlineChartBar, HiOutlineShoppingCart } from "react-icons/hi";
 import { IoPeople } from "react-icons/io5";
-import { GrUserAdmin } from "react-icons/gr";
 import { useAuth } from "../features/auth/hooks";
 import ProfileModal from "../features/auth/components/ProfileModal";
 
